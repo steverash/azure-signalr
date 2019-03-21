@@ -74,6 +74,12 @@ namespace Microsoft.Azure.SignalR
             // Return both the one from ConnectionString and from Endpoints
             // when the one from connectionString is not included in Endpoints
             var connectionStringIncluded = false;
+            // TODO: Better way if Endpoints already contains ConnectionString one?
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                yield return new ServiceEndpoint(options.ConnectionString, hubPrefix: options.HubPrefix);
+            }
+
             if (endpoints != null)
             {
                 foreach (var endpoint in endpoints)
@@ -83,6 +89,7 @@ namespace Microsoft.Azure.SignalR
                         connectionStringIncluded = true;
                     }
 
+                    endpoint.HubPrefix = options.HubPrefix;
                     yield return endpoint;
                 }
             }
